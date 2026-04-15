@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contador Regressivo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .countdown-wrap {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 96px;
+    line-height: 1;
+    color: #E30613;
+    letter-spacing: 2px;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #E30613;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+
+  .separator {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: #E30613;
+    line-height: 1;
+    padding-bottom: 28px;
+    opacity: 0.6;
+  }
+
+  .ended .number {
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @media (max-width: 600px) {
+    .countdown-wrap { gap: 16px; }
+    .number { font-size: 56px; min-width: 70px; }
+    .label { font-size: 12px; letter-spacing: 3px; }
+    .separator { font-size: 48px; padding-bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="countdown-wrap" id="countdown">
+  <div class="unit">
+    <span class="number" id="days">00</span>
+    <span class="label">Dias</span>
+  </div>
+  <span class="separator">:</span>
+  <div class="unit">
+    <span class="number" id="hours">00</span>
+    <span class="label">Horas</span>
+  </div>
+  <span class="separator">:</span>
+  <div class="unit">
+    <span class="number" id="minutes">00</span>
+    <span class="label">Minutos</span>
+  </div>
+  <span class="separator">:</span>
+  <div class="unit">
+    <span class="number" id="seconds">00</span>
+    <span class="label">Segundos</span>
+  </div>
+</div>
+
+<script>
+  // Target: 16/04/2026 às 20:00 horário de Brasília (UTC-3)
+  const TARGET = new Date('2026-04-16T23:00:00Z').getTime();
+
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function tick() {
+    const now = Date.now();
+    let diff = TARGET - now;
+
+    if (diff <= 0) {
+      diff = 0;
+      document.getElementById('countdown').classList.add('ended');
+    }
+
+    const s = Math.floor(diff / 1000);
+    const days = Math.floor(s / 86400);
+    const hours = Math.floor((s % 86400) / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
+
+    document.getElementById('days').textContent = pad(days);
+    document.getElementById('hours').textContent = pad(hours);
+    document.getElementById('minutes').textContent = pad(minutes);
+    document.getElementById('seconds').textContent = pad(seconds);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+
+</body>
+</html>
